@@ -181,7 +181,7 @@ void add_file(const char *fname, struct FILESYSTEM *fsys, unsigned char *buf)
 			fsys[used_struc_fsys].num = fnum;
 			fsys[used_struc_fsys].flg = 0x00;
 			fsys[used_struc_fsys].size = fsize;
-			fsys[used_struc_fsys].addr = sizeof(fsys) * fsys->fs_length + FILESYSTEM_CYLINDER * used_struc_fsys;
+			fsys[used_struc_fsys].addr = sizeof(struct FILESYSTEM) * fsys->fs_length + FILESYSTEM_CYLINDER * used_struc_fsys;
 			fsys[used_struc_fsys].filesys_len = filesys_len;
 
 			fread(buf + FILESYSTEM_CYLINDER * used_struc_fsys, 1, FILESYSTEM_CYLINDER, in);
@@ -194,7 +194,7 @@ void add_file(const char *fname, struct FILESYSTEM *fsys, unsigned char *buf)
 				fsys[used_struc_fsys - 1].next = 1;
 			}
 		}else{
-			printf("FileSystem Overflow.");
+			printf("FileSystem Overflow.\n");
 			exit(-1);
 		}
 	}
