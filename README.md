@@ -2,6 +2,13 @@
 自作OS用ファイルシステム作成ソフトです。
 今のところファイルシステムに名称はありません。
 
+# オプション
+mkfs \[syslen:\] \[out:\] file: ...
+
+syslen: ファイルシステムの最大長 1024\*syslen byteのデータを格納できます 一番初めに指定しなければいけません
+out: 出力するファイル名
+file: 追加するファイルの名称 いくつでも指定可能
+
 # 基本構成
 このファイルシステムはヘッダと一定数のバイトの集まりで構成されています
 ```
@@ -18,6 +25,12 @@
 ヘッダは下のようになっています
 
 ```
+struct TIME
+{
+	unsigned short year;
+	unsigned char month, day, hour, min, sec;
+};
+
 struct FILESYSTEM
 {
 	/* ファイル名 .も含む 足りない場合は0埋め */
@@ -28,7 +41,7 @@ struct FILESYSTEM
 	 * ファイル管理フラグ
 	 *
 	 * 0 not use
-	 * 0 reserve
+	 * 0 deleted
 	 * 0 reserve
 	 * 0 reserve
 	 * 0 reserve
@@ -49,8 +62,14 @@ struct FILESYSTEM
 	unsigned int dirnum;
 	/* ファイルヘッダ/データの構造体配列の要素数 */
 	unsigned int fs_length;
+	/* ファイル作成時刻 */
+	struct TIME createTime;
 	/* 予約領域 パティング */
-	unsigned char reserve1[8];
+	unsigned char reserve1;
+	/* ファイルシステムのリスト数 */
+	unsigned int filesys_len;
+	/* 予約領域 */
+	unsigned char reserve2[12];
 };
 ```
 
