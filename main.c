@@ -111,7 +111,6 @@ int main(int argc, char *argv[])
 		}
 		/* 入れるファイルを指定 file:入力ファイル */
 		if(!strncmp(argv[i], "file:", 5) && strlen(argv[i]) > 5){
-			printf("add file : name length %d\n", strlen(argv[i]));
 			add_file(argv[i] + 5, file, buf);
 		}
 		/* 出力ファイル */
@@ -121,7 +120,7 @@ int main(int argc, char *argv[])
 		/* ファイルシステムのサイズ */
 		if(!strncmp(argv[i], "syslen:", 7) && strlen(argv[i]) > 7){
 			unsigned long len = strtoul(argv[i] + 7, NULL, 0);
-			if(len != 0 && len < UINT_MAX + 1){
+			if(len != 0 && len < (unsigned long)(UINT_MAX + 1)){
 				filesys_len = len;
 				/* 必要メモリを取る */
 				file = realloc(file, sizeof(struct FILESYSTEM) * filesys_len);
@@ -129,7 +128,7 @@ int main(int argc, char *argv[])
 				buf = calloc(1, sizeof(unsigned char) * FILESYSTEM_CYLINDER * filesys_len);
 				filesys_init(file);
 			}else{
-				printf("filessystem length error.");
+				printf("filessystem length error.\n");
 				exit(-1);
 			}
 		}
